@@ -1,4 +1,8 @@
 #include "main.h"
+#include "okapi/api.hpp"
+
+using namespace okapi;
+using namespace pros;
 
 /**
  * A callback function for LLEMU's center button.
@@ -75,18 +79,33 @@ void autonomous() {}
  */
 void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor left_mtr(1);
-	pros::Motor right_mtr(2);
+	auto chassis = okapi::ChassisControllerFactory::create(
+	  1, -2,
+	  okapi::AbstractMotor::gearset::green,
+	  {4.0_in, 13_in}
+	);
+	pros::Motor intaker_motor(5);
+	// pros::Motor right_mtr(2);
 
 	while (true) {
 		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
 		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
 		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
-		// int left = master.get_analog(ANALOG_LEFT_Y);
-		int right = master.get_analog(ANALOG_RIGHT_Y);
 
-		// left_mtr = left;
-		right_mtr = right;
+		int speed = master.get_analog(ANALOG_RIGHT_Y);
+		int yaw = master.get_analog(ANALOG_RIGHT_X);
+
+		chassis.arcade(speed/127.0, yaw/127.0, 0.05);
+
+		if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_LEFT)) {
+			// chassis.turnAngle(90_deg);
+			intaker_motor = 50;
+		} else {
+			intaker_motor = 0;
+		}
+
+		// left_mtr = speed;
+		// right_mtr = -speed;
 		pros::delay(20);
 	}
 }
