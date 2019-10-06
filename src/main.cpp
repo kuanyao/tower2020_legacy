@@ -80,11 +80,12 @@ void autonomous() {}
 void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	auto chassis = okapi::ChassisControllerFactory::create(
-	  1, -2,
+	  {1, 11}, {-10, -20},
 	  okapi::AbstractMotor::gearset::green,
 	  {4.0_in, 13_in}
 	);
-	pros::Motor intaker_motor(5);
+	pros::Motor intake_motor(5);
+
 	// pros::Motor right_mtr(2);
 
 	while (true) {
@@ -97,13 +98,16 @@ void opcontrol() {
 
 		chassis.arcade(speed/127.0, yaw/127.0, 0.05);
 
-		if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_LEFT)) {
-			// chassis.turnAngle(90_deg);
-			intaker_motor = 50;
+		if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)) {
+			intake_motor = 127;
 		} else {
-			intaker_motor = 0;
+			intake_motor = 0;
 		}
-
+		if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_L2)) {
+			intake_motor = -127;
+		} else {
+			intake_motor = 0;
+		}
 		// left_mtr = speed;
 		// right_mtr = -speed;
 		pros::delay(20);
