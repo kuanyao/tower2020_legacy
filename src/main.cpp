@@ -28,7 +28,7 @@ void on_center_button() {
  */
 void initialize() {
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
+	pros::lcd::set_text(1, "look behind you...");
 
 	pros::lcd::register_btn1_cb(on_center_button);
 }
@@ -78,36 +78,84 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	auto chassis = okapi::ChassisControllerFactory::create(
-	  {1, 11}, {-10, -20},
-	  okapi::AbstractMotor::gearset::green,
-	  {4.0_in, 13_in}
-	);
-	pros::Motor intake_motor(5);
-
+	// pros::Controller master(pros::E_CONTROLLER_MASTER);
+	// auto chassis = okapi::ChassisControllerFactory::create(
+	//   {1, 11}, {-10, -20},
+	//   okapi::AbstractMotor::gearset::green,
+	//   {4.0_in, 13_in}
+	// );
+	pros::Motor intake_motor(5); 	
+	pros::Motor lever_motor(19);
+	pros::Motor chassis_right_bottom(1);
+	pros::Motor chassis_right_top(11);
+	pros::Motor chassis_left_bottom(10);
+	pros::Motor chassis_left_top(20);
+	pros::Controller master (E_CONTROLLER_MASTER);
 	// pros::Motor right_mtr(2);
 
 	while (true) {
-		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
+		// pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
+		//                  (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
+		//                  (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
 
-		int speed = master.get_analog(ANALOG_RIGHT_Y);
-		int yaw = master.get_analog(ANALOG_RIGHT_X);
+		// int speed = master.get_analog(ANALOG_RIGHT_Y);
+		// // int yaw = master.get_analog(ANALOG_RIGHT_X);
 
-		chassis.arcade(speed/127.0, yaw/127.0, 0.05);
+		// chassis.arcade(speed/127.0, yaw/127.0, 0.05);
+		while (true) {
 
-		if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)) {
-			intake_motor = 127;
-		} else {
-			intake_motor = 0;
+			// chassis stuff
+			// int threshold = 20;
+			// float rightjoystick = E_CONTROLLER_ANALOG_RIGHT_Y;
+			// float leftjoystick = E_CONTROLLER_ANALOG_LEFT_Y;
+
+			// if (abs(rightjoystick) > threshold) {
+			// 	chassis_right_bottom = rightjoystick;
+			// 	chassis_right_top = rightjoystick;
+			// } else {
+			// 	chassis_right_bottom = 0;
+			// 	chassis_right_top = 0;
+			// }
+
+			// if (abs(leftjoystick) > threshold) {
+			// 	chassis_left_bottom = leftjoystick;
+			// 	chassis_left_top = leftjoystick;
+			// } else {
+			// 	chassis_right_bottom = 0;
+			// 	chassis_right_top = 0;
+			// }
+			
+			chassis_right_bottom.move(master.get_analog(ANALOG_LEFT_Y));
+    		chassis_right_top.move(master.get_analog(ANALOG_RIGHT_Y));
+			chassis_left_top.move(master.get_analog(ANALOG_LEFT_Y));
+			chassis_left_bottom.move(master.get_analog(ANALOG_RIGHT_Y));
+
+			if (master.get_digital(E_CONTROLLER_DIGITAL_L2)) {
+				intake_motor = 127;	
+			} else {
+				intake_motor = 0;
+			}
+			if (master.get_digital(E_CONTROLLER_DIGITAL_L1)) {
+				intake_motor = -127;
+			} else {
+				intake_motor = 0;
+			}
+
+			//lever stuff
+			if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_R1)) {
+				lever_motor = -75;
+				pros::delay(500);
+			} else {
+				lever_motor = 0;
+			}
+			if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_R2)) {
+
+				pros::delay(900);
+			} else {
+				lever_motor = 0;
+			}
 		}
-		if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_L2)) {
-			intake_motor = -127;
-		} else {
-			intake_motor = 0;
-		}
+
 		// left_mtr = speed;
 		// right_mtr = -speed;
 		pros::delay(20);
