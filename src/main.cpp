@@ -14,150 +14,104 @@ void on_center_button() {
 	static bool pressed = false;
 	pressed = !pressed;
 	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
+		pros::lcd::set_text(2, "look behind you");
 	} else {
 		pros::lcd::clear_line(2);
 	}
 }
 
-/**
- * Runs initialization code. This occurs as soon as the program is started.
- *
- * All other competition modes are blocked by initialize; it is recommended
- * to keep execution time for this mode under a few seconds.
- */
 void initialize() {
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "look behind you...");
+	pros::lcd::set_text(1, "Hello");
 
 	pros::lcd::register_btn1_cb(on_center_button);
 }
 
-/**
- * Runs while the robot is in the disabled state of Field Management System or
- * the VEX Competition Switch, following either autonomous or opcontrol. When
- * the robot is enabled, this task will exit.
- */
-void disabled() {}
+	void disabled() {}
 
-/**
- * Runs after initialize(), and before autonomous when connected to the Field
- * Management System or the VEX Competition Switch. This is intended for
- * competition-specific initialization routines, such as an autonomous selector
- * on the LCD.
- *
- * This task will exit when the robot is enabled and autonomous or opcontrol
- * starts.
- */
-void competition_initialize() {}
+	void competition_initialize() {}
 
-/**
- * Runs the user autonomous code. This function will be started in its own task
- * with the default priority and stack size whenever the robot is enabled via
- * the Field Management System or the VEX Competition Switch in the autonomous
- * mode. Alternatively, this function may be called in initialize or opcontrol
- * for non-competition testing purposes.
- *
- * If the robot is disabled or communications is lost, the autonomous task
- * will be stopped. Re-enabling the robot will restart the task, not re-start it
- * from where it left off.
- */
-void autonomous() {}
+	void autonomous() {}
 
-/**
- * Runs the operator control code. This function will be started in its own task
- * with the default priority and stack size whenever the robot is enabled via
- * the Field Management System or the VEX Competition Switch in the operator
- * control mode.
- *
- * If no competition control is connected, this function will run immediately
- * following initialize().
- *
- * If the robot is disabled or communications is lost, the
- * operator control task will be stopped. Re-enabling the robot will restart the
- * task, not resume it from where it left off.
- */
 void opcontrol() {
-	// pros::Controller master(pros::E_CONTROLLER_MASTER);
-	// auto chassis = okapi::ChassisControllerFactory::create(
-	//   {1, 11}, {-10, -20},
-	//   okapi::AbstractMotor::gearset::green,
-	//   {4.0_in, 13_in}
-	// );
-	pros::Motor intake_motor(5); 	
+ 	pros::Motor intake_motor(5); 
+	pros::Motor intake_motor2(2);
 	pros::Motor lever_motor(19);
 	pros::Motor chassis_right_bottom(1);
 	pros::Motor chassis_right_top(11);
 	pros::Motor chassis_left_bottom(10);
 	pros::Motor chassis_left_top(20);
+	pros::Motor arm_motor(18);
 	pros::Controller master (E_CONTROLLER_MASTER);
-	// pros::Motor right_mtr(2);
+
+	const int ARM_PRESETS[4]  = {0, -1020, -1405, -2050};
+	const int ARM_PRESETS_LEN = 3;
+	int armTarget = 0;
+	int armIterate = 0;
+
+	// void chassis_move_relative(float distance) {
+	// 	chassis_right_bottom.move_relative(distance);
+	// 	chassis_right_top.move_relative(distance);
+		
+	// 	chassis_left_top.move_relative(distance*-1);
+	// 	chassis_left_bottom.move_relative(distance*-1);
+	// }
 
 	while (true) {
-		// pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-		//                  (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-		//                  (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
-
-		// int speed = master.get_analog(ANALOG_RIGHT_Y);
-		// // int yaw = master.get_analog(ANALOG_RIGHT_X);
-
-		// chassis.arcade(speed/127.0, yaw/127.0, 0.05);
 		while (true) {
-
-			// chassis stuff
-			// int threshold = 20;
-			// float rightjoystick = E_CONTROLLER_ANALOG_RIGHT_Y;
-			// float leftjoystick = E_CONTROLLER_ANALOG_LEFT_Y;
-
-			// if (abs(rightjoystick) > threshold) {
-			// 	chassis_right_bottom = rightjoystick;
-			// 	chassis_right_top = rightjoystick;
-			// } else {
-			// 	chassis_right_bottom = 0;
-			// 	chassis_right_top = 0;
-			// }
-
-			// if (abs(leftjoystick) > threshold) {
-			// 	chassis_left_bottom = leftjoystick;
-			// 	chassis_left_top = leftjoystick;
-			// } else {
-			// 	chassis_right_bottom = 0;
-			// 	chassis_right_top = 0;
-			// }
-			
+			//chassis stuff
 			chassis_right_bottom.move(master.get_analog(ANALOG_LEFT_Y));
-    		chassis_right_top.move(master.get_analog(ANALOG_RIGHT_Y));
-			chassis_left_top.move(master.get_analog(ANALOG_LEFT_Y));
-			chassis_left_bottom.move(master.get_analog(ANALOG_RIGHT_Y));
+			chassis_right_top.move(master.get_analog(ANALOG_LEFT_Y));
+			
+			chassis_left_top.move(master.get_analog(ANALOG_RIGHT_Y)*-1);
+			chassis_left_bottom.move(master.get_analog(ANALOG_RIGHT_Y)*-1);
 
+			//intake stuff
 			if (master.get_digital(E_CONTROLLER_DIGITAL_L2)) {
 				intake_motor = 127;	
+				intake_motor2 = -127;
 			} else {
 				intake_motor = 0;
+				intake_motor2 = 0;
 			}
 			if (master.get_digital(E_CONTROLLER_DIGITAL_L1)) {
 				intake_motor = -127;
+				intake_motor2 = 127;
 			} else {
 				intake_motor = 0;
+				intake_motor2 = 0;
 			}
 
 			//lever stuff
 			if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_R1)) {
-				lever_motor = -75;
-				pros::delay(500);
+				lever_motor = 75;
+				pros::delay(4550);
 			} else {
 				lever_motor = 0;
 			}
 			if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_R2)) {
-
-				pros::delay(900);
+				lever_motor = -75;
+				pros::delay(4300);
 			} else {
 				lever_motor = 0;
 			}
-		}
 
-		// left_mtr = speed;
-		// right_mtr = -speed;
-		pros::delay(20);
+
+			// lift from korvex 
+			if (master.get_digital_new_press(DIGITAL_RIGHT)) {
+				armIterate++;
+				if (armIterate >= ARM_PRESETS_LEN) {
+					armIterate = ARM_PRESETS_LEN;
+				}
+				armTarget = ARM_PRESETS[armIterate];
+				master.print(0, 0, "arm Tar: %d", armTarget);
+				arm_motor.move_absolute(armTarget, 200);
+			}
+			else if (master.get_digital_new_press(DIGITAL_Y)) {
+				armIterate = 0;
+				arm_motor.move_absolute(20, 200);
+			}
+		};
 	}
+	pros::delay(20);
 }
