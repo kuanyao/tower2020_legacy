@@ -1,5 +1,6 @@
 #include "main.h"
 #include "okapi/api.hpp"
+#include "robot.hpp"
 
 using namespace okapi;
 using namespace pros;
@@ -14,104 +15,97 @@ void on_center_button() {
 	static bool pressed = false;
 	pressed = !pressed;
 	if (pressed) {
-		pros::lcd::set_text(2, "look behind you");
+		pros::lcd::set_text(2, "Hello Pros User!");
 	} else {
 		pros::lcd::clear_line(2);
 	}
 }
 
-void initialize() {
-	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello");
+void disabled() {}
 
-	pros::lcd::register_btn1_cb(on_center_button);
+void competition_initialize() {}
+
+void chassis_tank_drive(float left, float right) {
+	chassis_right_rear.move(right);
+	chassis_right_front.move(right);
+	
+	chassis_left_front.move(-left);
+	chassis_left_rear.move(-left);
 }
 
-	void disabled() {}
+void chassis_control() {
+	int left_power = master.get_analog(ANALOG_LEFT_Y);
+	int right_power = master.get_analog(ANALOG_RIGHT_Y);
+	chassis_tank_drive(right_power, left_power);
+}
 
-	void competition_initialize() {}
+void intake_drive(float left_intake_speed, float right_intake_speed) {
+	intake_motor_left.move(left_intake_speed);
+	intake_motor_right.move(-right_intake_speed);
+}
 
-	void autonomous() {}
+void intake_control() {
+	if(master.get_digital(E_CONTROLLER_DIGITAL_L2)) {
+		intake_drive(127,127);
+	} else if(master.get_digital(E_CONTROLLER_DIGITAL_L1)) {
+		intake_drive(-100,-100);
+	} else {
+		intake_drive(0,0);
+	}
+	
+}
+
+void lever_drive(float lever_speed) {
+	lever_motor.move(lever_speed);
+}
+
+void lever_control() {
+	if(master.get_digital(E_CONTROLLER_DIGITAL_R2)) {
+		lever_drive(-127);
+		intake_drive(-40, -40);
+	} else if(master.get_digital(E_CONTROLLER_DIGITAL_R1)) {
+		lever_drive(127);
+		intake_drive(40, 40);
+	} else {
+		lever_drive(0);
+	}
+}
+int armTarget = 0;
+int armIterate = 0;
+void arm_control() {
+	if (master.get_digital_new_press(DIGITAL_RIGHT)) {
+		lever_drive(80);
+		pros::delay(100);
+		lever_drive(0);
+		armIterate++;
+		if (armIterate >= ARM_PRESETS_LEN) {
+			armIterate = ARM_PRESETS_LEN;
+		}
+		armTarget = ARM_PRESETS[armIterate];
+		master.print(0, 0, "Hello Pranav %d", armTarget);
+		arm_motor.move_absolute(armTarget, 200);
+	} else if (master.get_digital_new_press(DIGITAL_Y)) {
+		armIterate = 0;
+		lever_drive(-125);
+		pros::delay(200);
+		lever_drive(0);
+		arm_motor.move_absolute(20, 200);
+	}
+}
 
 void opcontrol() {
- 	pros::Motor intake_motor(5); 
-	pros::Motor intake_motor2(2);
-	pros::Motor lever_motor(19);
-	pros::Motor chassis_right_bottom(1);
-	pros::Motor chassis_right_top(11);
-	pros::Motor chassis_left_bottom(10);
-	pros::Motor chassis_left_top(20);
-	pros::Motor arm_motor(18);
-	pros::Controller master (E_CONTROLLER_MASTER);
-
-	const int ARM_PRESETS[4]  = {0, -1020, -1405, -2050};
-	const int ARM_PRESETS_LEN = 3;
-	int armTarget = 0;
-	int armIterate = 0;
-
-	// void chassis_move_relative(float distance) {
-	// 	chassis_right_bottom.move_relative(distance);
-	// 	chassis_right_top.move_relative(distance);
-		
-	// 	chassis_left_top.move_relative(distance*-1);
-	// 	chassis_left_bottom.move_relative(distance*-1);
-	// }
-
 	while (true) {
-		while (true) {
-			//chassis stuff
-			chassis_right_bottom.move(master.get_analog(ANALOG_LEFT_Y));
-			chassis_right_top.move(master.get_analog(ANALOG_LEFT_Y));
-			
-			chassis_left_top.move(master.get_analog(ANALOG_RIGHT_Y)*-1);
-			chassis_left_bottom.move(master.get_analog(ANALOG_RIGHT_Y)*-1);
+		//chassis stuff
+		chassis_control();
 
-			//intake stuff
-			if (master.get_digital(E_CONTROLLER_DIGITAL_L2)) {
-				intake_motor = 127;	
-				intake_motor2 = -127;
-			} else {
-				intake_motor = 0;
-				intake_motor2 = 0;
-			}
-			if (master.get_digital(E_CONTROLLER_DIGITAL_L1)) {
-				intake_motor = -127;
-				intake_motor2 = 127;
-			} else {
-				intake_motor = 0;
-				intake_motor2 = 0;
-			}
+		//intake
+		intake_control();
 
-			//lever stuff
-			if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_R1)) {
-				lever_motor = 75;
-				pros::delay(4550);
-			} else {
-				lever_motor = 0;
-			}
-			if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_R2)) {
-				lever_motor = -75;
-				pros::delay(4300);
-			} else {
-				lever_motor = 0;
-			}
+		//lever stuff
+		lever_control();
 
-
-			// lift from korvex 
-			if (master.get_digital_new_press(DIGITAL_RIGHT)) {
-				armIterate++;
-				if (armIterate >= ARM_PRESETS_LEN) {
-					armIterate = ARM_PRESETS_LEN;
-				}
-				armTarget = ARM_PRESETS[armIterate];
-				master.print(0, 0, "arm Tar: %d", armTarget);
-				arm_motor.move_absolute(armTarget, 200);
-			}
-			else if (master.get_digital_new_press(DIGITAL_Y)) {
-				armIterate = 0;
-				arm_motor.move_absolute(20, 200);
-			}
-		};
+		// lift from korvex 
+		arm_control();
+		pros::delay(20);
 	}
-	pros::delay(20);
 }
