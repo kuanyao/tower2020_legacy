@@ -43,4 +43,22 @@ void red_1cube();
 void red_4cube();
 void skill1();
 
+#include "main.h"
+#include "okapi/api.hpp"
+#include "robot.hpp"
+
+using namespace okapi;
+using namespace pros;
+
+void chassis_tank_drive(float left, float right);
+
+void chassis_control();
+void intake_drive(float left_intake_speed, float right_intake_speed);
+
+void intake_control();
+
+void lever_drive(float lever_speed);
+void lever_control();
+void arm_control();
+
 #endif
