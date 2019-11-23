@@ -12,9 +12,9 @@ void chassis_control() {
 }
 
 void intake_control() {
-	if(master.get_digital(E_CONTROLLER_DIGITAL_L2)) {
+	if(master.get_digital(E_CONTROLLER_DIGITAL_L1)) {
 		intake_drive(127,127);
-	} else if(master.get_digital(E_CONTROLLER_DIGITAL_L1)) {
+	} else if(master.get_digital(E_CONTROLLER_DIGITAL_L2)) {
 		intake_drive(-100,-100);
 	} else {
 		intake_drive(0,0);
@@ -24,10 +24,10 @@ void intake_control() {
 void lever_control() {
 	if(master.get_digital(E_CONTROLLER_DIGITAL_R2)) {
 		lever_drive(-127);
-		intake_drive(-40, -40);
+		intake_drive(69, 69);
 	} else if(master.get_digital(E_CONTROLLER_DIGITAL_R1)) {
 		lever_drive(127);
-		intake_drive(40, 40);
+		intake_drive(-42, -42);
 	} else {
 		lever_drive(0);
 	}

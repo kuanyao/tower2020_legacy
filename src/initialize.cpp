@@ -3,7 +3,7 @@
 
 using namespace pros;
 
-pros::Motor intake_motor_left(INTAKE_MOTOR_LEFT); 
+pros::Motor intake_motor_left(INTAKE_MOTOR_LEFT);
 pros::Motor intake_motor_right(INTAKE_MOTOR_RIGHT);
 pros::Motor lever_motor(LEVER_MOTOR);
 pros::Motor chassis_right_rear(CHASSIS_RIGHT_REAR);
@@ -14,6 +14,7 @@ pros::Motor arm_motor(ARM_MOTOR);
 pros::Controller master (E_CONTROLLER_MASTER);
 
 int autonSelection = 10;
+int autonPark = 0;
 
 static lv_res_t redBtnmAction(lv_obj_t *btnm, const char *txt)
 {
@@ -28,7 +29,7 @@ static lv_res_t redBtnmAction(lv_obj_t *btnm, const char *txt)
 	{
 		autonSelection = -2;
 	}
-	
+
     if (txt == "Disable")
 	{
 		autonSelection = -3;
@@ -57,16 +58,34 @@ static lv_res_t blueBtnmAction(lv_obj_t *btnm, const char *txt)
 	return LV_RES_OK;
 }
 
-static lv_res_t skillsBtnAction(lv_obj_t *btn)
+static lv_res_t skillsBtnAction(lv_obj_t *btn, const char *txt)
 {
-	autonSelection = 0;
+	printf("blue button: %s released\n", txt);
+
+	if (txt == "Skill 1")
+	{
+		autonSelection = 0;
+	}
+	if (txt == "Skill 2")
+	{
+		autonSelection = 10;
+	}
+	if (txt == "Skill 3")
+	{
+		autonSelection = 20;
+	}
+
 	return LV_RES_OK;
 }
 
+//Create a button descriptor string array
+static const char *btnmMap[] = {"4Cube", "1Cube", "Disable", ""};
+static const char *btnSkillsMap[] = {"Skill 1", "Skill 2", "Skill 3", ""};
+
 void initialize()
 {
-    /*Create a button descriptor string array*/
-    const char *btnmMap[] = {"4Cube", "1Cube", "Disable"};
+	pros::delay(50); // sometimes LVGL won't draw the screen if there is no delay or it is not inverted on the brain
+
 	// lvgl theme
 	lv_theme_t *th = lv_theme_alien_init(280, NULL); //Set a HUE value and keep font default
 	lv_theme_set_current(th);
@@ -103,13 +122,11 @@ void initialize()
 	lv_obj_align(blueBtnm, NULL, LV_ALIGN_CENTER, 0, 0);
 
 	// skills tab
-	lv_obj_t *skillsBtn = lv_btn_create(skillsTab, NULL);
-	lv_obj_t *label = lv_label_create(skillsBtn, NULL);
-	lv_label_set_text(label, "Skills");
-	lv_btn_set_action(skillsBtn, LV_BTN_ACTION_CLICK, skillsBtnAction);
-	// lv_btn_set_state(skillsBtn, LV_BTN_STATE_TGL_REL);
-	lv_obj_set_size(skillsBtn, 450, 50);
-	lv_obj_set_pos(skillsBtn, 0, 100);
-	lv_obj_align(skillsBtn, NULL, LV_ALIGN_CENTER, 0, 0);
+	lv_obj_t *skillsBtnm = lv_btnm_create(skillsTab, NULL);
+	lv_btnm_set_map(skillsBtnm, btnSkillsMap);
+	lv_btnm_set_toggle(skillsBtnm, true, 0);
+	lv_btnm_set_action(skillsBtnm, skillsBtnAction);
+	lv_obj_set_size(skillsBtnm, 450, 50);
+	lv_obj_set_pos(skillsBtnm, 0, 100);
+	lv_obj_align(skillsBtnm, NULL, LV_ALIGN_CENTER, 0, 0);
 }
-

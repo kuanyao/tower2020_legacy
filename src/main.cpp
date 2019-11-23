@@ -7,7 +7,9 @@ using namespace pros;
 
 void disabled() {}
 
-void competition_initialize() {}
+void competition_initialize() {
+
+}
 
 void opcontrol() {
 	while (true) {
@@ -20,7 +22,7 @@ void opcontrol() {
 		//lever stuff
 		lever_control();
 
-		// lift from korvex 
+		// lift from korvex
 		arm_control();
 		pros::delay(20);
 	}

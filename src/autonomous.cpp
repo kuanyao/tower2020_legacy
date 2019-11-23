@@ -17,6 +17,12 @@ void autonomous()
     case 0: // skills 18
         skill1();
         break;
+    case 10:
+        skill2();
+        break;
+    case 20:
+        skill3();
+        break;
     case 1: 
         blue_4cube();
         break;
