@@ -3,6 +3,7 @@
 
 #include "main.h"
 #include "pros/misc.h"
+#include "okapi/api.hpp"
 
 //chassis motor ports
 const int CHASSIS_LEFT_FRONT  = 19;
@@ -20,6 +21,7 @@ const int LEVER_MOTOR = 16;
 //arm motor
 const int ARM_MOTOR = 18;
 
+
 //arm varibles
 const int ARM_PRESETS[5]  = {0, -1768, -1920, -2205, -2525};
 const int ARM_PRESETS_LEN = 5;
@@ -34,6 +36,7 @@ extern pros::Motor intake_motor_right;
 extern pros::Motor lever_motor;
 extern pros::Motor arm_motor;
 extern pros::Controller master;
+extern okapi::ChassisControllerIntegrated chassis;
 
 extern int autonSelection;
 

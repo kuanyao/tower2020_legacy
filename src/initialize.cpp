@@ -1,17 +1,36 @@
 #include "api.h"
 #include "robot.hpp"
+#include "okapi/api.hpp"
 
 using namespace pros;
+using namespace okapi;
 
 pros::Motor intake_motor_left(INTAKE_MOTOR_LEFT);
 pros::Motor intake_motor_right(INTAKE_MOTOR_RIGHT);
 pros::Motor lever_motor(LEVER_MOTOR);
+pros::Motor arm_motor(ARM_MOTOR);
+pros::Controller master (E_CONTROLLER_MASTER);
+
+/* choose only one of the following: either separated chassis motors, or the chassis controller */
+//chassis motors
 pros::Motor chassis_right_rear(CHASSIS_RIGHT_REAR);
 pros::Motor chassis_right_front(CHASIIS_RIGHT_FRONT);
 pros::Motor chassis_left_rear(CHASSIS_LEFT_REAR);
 pros::Motor chassis_left_front(CHASSIS_LEFT_FRONT);
-pros::Motor arm_motor(ARM_MOTOR);
-pros::Controller master (E_CONTROLLER_MASTER);
+
+const auto WHEEL_DIAMETER = 4.5_in;
+const auto CHASSIS_WIDTH = 11.5_in;
+// chassis controller
+okapi::ChassisControllerIntegrated chassis = ChassisControllerFactory::create(
+  {-CHASSIS_LEFT_FRONT, -CHASSIS_LEFT_REAR}, {CHASIIS_RIGHT_FRONT, CHASSIS_RIGHT_REAR},
+  AbstractMotor::gearset::green,
+  {WHEEL_DIAMETER, CHASSIS_WIDTH}
+);
+// /* choose only one of the following: either separated chassis motors, or the chassis controller */
+// okapi::ChassisControllerIntegrated intake = ChassisControllerFactory::create(
+//   {-INTAKE_MOTOR_RIGHT}, {INTAKE_MOTOR_LEFT},
+//   AbstractMotor::gearset::green
+// );
 
 int autonSelection = 10;
 int autonPark = 0;

@@ -229,4 +229,8 @@ class ChassisControllerFactory {
   okapi_makeCreateBasePid(ChassisControllerPID, create);
   okapi_makeCreateBasePid(std::shared_ptr<ChassisControllerPID>, createPtr);
 };
+// class intake {
+//   public:
+//   okapi_makeCreateAll(Motor);
+// };
 } // namespace okapi
