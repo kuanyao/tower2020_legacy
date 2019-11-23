@@ -21,7 +21,7 @@ void autonomous()
         skill2();
         break;
     case 20:
-        skill3();
+        skill2();
         break;
     case 1: 
         blue_4cube();

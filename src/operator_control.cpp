@@ -8,7 +8,7 @@ using namespace pros;
 void chassis_control() {
 	int left_power = master.get_analog(ANALOG_LEFT_Y);
 	int right_power = master.get_analog(ANALOG_RIGHT_Y);
-	chassis_tank_drive(right_power, left_power);
+	chassis_tank_drive(right_power, -left_power);
 }
 
 void intake_control() {
@@ -37,20 +37,51 @@ int armTarget = 0;
 int armIterate = 0;
 void arm_control() {
 	if (master.get_digital_new_press(DIGITAL_RIGHT)) {
-		lever_drive(80);
+		lever_drive(98);
 		pros::delay(100);
 		lever_drive(0);
-		armIterate++;
+		armIterate = 3;
 		if (armIterate >= ARM_PRESETS_LEN) {
 			armIterate = ARM_PRESETS_LEN;
 		}
 		armTarget = ARM_PRESETS[armIterate];
-		master.print(0, 0, "Hello Pranav %d", armTarget);
+		master.print(0, 0, "Don't read this sentence %d", armTarget);
+		arm_motor.move_absolute(armTarget, 200);
+	} else if (master.get_digital_new_press(DIGITAL_UP)) {
+		lever_drive(98);
+		pros::delay(100);
+		lever_drive(0);
+		armIterate = 4;
+		if (armIterate >= ARM_PRESETS_LEN) {
+			armIterate = ARM_PRESETS_LEN;
+		}
+		armTarget = ARM_PRESETS[armIterate];
+		master.print(0, 0, "Don't read this sentence %d", armTarget);
+		arm_motor.move_absolute(armTarget, 200);
+	} else if (master.get_digital_new_press(DIGITAL_LEFT)) {
+		lever_drive(98);
+		pros::delay(100);
+		lever_drive(0);
+		armIterate = 1;
+		if (armIterate >= ARM_PRESETS_LEN) {
+			armIterate = ARM_PRESETS_LEN;
+		}
+		armTarget = ARM_PRESETS[armIterate];
+		master.print(0, 0, "Don't read this sentence %d", armTarget);
+		arm_motor.move_absolute(armTarget, 200);
+	} else if(master.get_digital_new_press(DIGITAL_DOWN)) {
+		lever_drive(98);
+		pros::delay(100);
+		lever_drive(0);
+		armIterate = 2;
+		if (armIterate >= ARM_PRESETS_LEN) {
+			armIterate = ARM_PRESETS_LEN;
+		}
+		armTarget = ARM_PRESETS[armIterate];
+		master.print(0, 0, "Don't read this sentence %d", armTarget);
 		arm_motor.move_absolute(armTarget, 200);
 	} else if (master.get_digital_new_press(DIGITAL_Y)) {
 		armIterate = 0;
-		lever_drive(-125);
-		pros::delay(200);
 		lever_drive(0);
 		arm_motor.move_absolute(20, 200);
 	}

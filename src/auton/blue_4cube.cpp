@@ -1,36 +1,18 @@
 #include "robot.hpp"
+#include "okapi/api.hpp"
+
+using namespace okapi;
+
+//tune
+const auto WHEEL_DIAMETER = 4_in;
+const auto CHASSIS_WIDTH = 11.5_in;
+
+
+auto chassis = ChassisControllerFactory::create(CHASSIS_LEFT_FRONT, CHASSIS_LEFT_REAR, -CHASIIS_RIGHT_FRONT, -CHASSIS_RIGHT_REAR, AbstractMotor::gearset::green,
+  {WHEEL_DIAMETER, CHASSIS_WIDTH}
+);
+
 
 void blue_4cube() {
-    //vehicle move forward (async)
-
-    //lift the arm (async)
-
-    //sync
-
-    //vehicle move forward (async) 
-
-    //drop arm (async)
-
-    //sync
-
-    //intake spin (async)
-
-    //chassis move forward (async)
-
-    //sync
-
-    //vehicle stop
-    //intake stop
-
-    //vehicle move back
-
-    //vehicle turn -90 degree
-
-    //chassis move forward
-
-    //lever push forward
-
-    //chassis move back
-
-    //stop
+    chassis.moveDistance(12_in);
 }

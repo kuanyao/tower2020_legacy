@@ -21,8 +21,8 @@ const int LEVER_MOTOR = 16;
 const int ARM_MOTOR = 18;
 
 //arm varibles
-const int ARM_PRESETS[4]  = {0, -1920, -2205, -2505};
-const int ARM_PRESETS_LEN = 3;
+const int ARM_PRESETS[5]  = {0, -1768, -1920, -2205, -2525};
+const int ARM_PRESETS_LEN = 5;
 
 //chassis
 extern pros::Motor chassis_left_front;
@@ -43,7 +43,6 @@ void red_1cube();
 void red_4cube();
 void skill1();
 void skill2();
-void skill3();
 
 void chassis_tank_drive(float left, float right);
 
