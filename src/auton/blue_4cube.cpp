@@ -4,6 +4,10 @@
 using namespace okapi;
 
 void blue_4cube() {
+    arm_drive(4);
+    pros::delay(1000);
+    arm_drive(0);
+
     chassis.setMaxVelocity(80);
     intake_drive(100, 100);
     // chassis.moveDistance(10_in);

@@ -23,7 +23,7 @@ const int ARM_MOTOR = 18;
 
 
 //arm varibles
-const int ARM_PRESETS[5]  = {0, -868, -1020, -1305, -1725};
+const int ARM_PRESETS[5]  = {0, -668, -820, -905, -1025};
 const int ARM_PRESETS_LEN = 5;
 
 //chassis
