@@ -23,7 +23,7 @@ const int ARM_MOTOR = 18;
 
 
 //arm varibles
-const int ARM_PRESETS[5]  = {0, -1768, -1920, -2205, -2525};
+const int ARM_PRESETS[5]  = {0, -868, -1020, -1305, -1725};
 const int ARM_PRESETS_LEN = 5;
 
 //chassis
@@ -37,6 +37,10 @@ extern pros::Motor lever_motor;
 extern pros::Motor arm_motor;
 extern pros::Controller master;
 extern okapi::ChassisControllerIntegrated chassis;
+extern okapi::AsyncPosIntegratedController arm;
+extern okapi::AsyncPosIntegratedController lever;
+
+
 
 extern int autonSelection;
 
@@ -51,6 +55,7 @@ void chassis_tank_drive(float left, float right);
 
 void chassis_control();
 void intake_drive(float left_intake_speed, float right_intake_speed);
+void arm_drive(int pos);
 
 void intake_control();
 

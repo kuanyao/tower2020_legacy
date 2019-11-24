@@ -33,56 +33,21 @@ void lever_control() {
 	}
 }
 
-int armTarget = 0;
-int armIterate = 0;
+
 void arm_control() {
+	int armTarget = 0;
+	int armIterate = 0;
+	
 	if (master.get_digital_new_press(DIGITAL_RIGHT)) {
-		lever_drive(98);
-		pros::delay(100);
-		lever_drive(0);
-		armIterate = 3;
-		if (armIterate >= ARM_PRESETS_LEN) {
-			armIterate = ARM_PRESETS_LEN;
-		}
-		armTarget = ARM_PRESETS[armIterate];
-		master.print(0, 0, "Don't read this sentence %d", armTarget);
-		arm_motor.move_absolute(armTarget, 200);
+		arm_drive(3);
 	} else if (master.get_digital_new_press(DIGITAL_UP)) {
-		lever_drive(98);
-		pros::delay(100);
-		lever_drive(0);
-		armIterate = 4;
-		if (armIterate >= ARM_PRESETS_LEN) {
-			armIterate = ARM_PRESETS_LEN;
-		}
-		armTarget = ARM_PRESETS[armIterate];
-		master.print(0, 0, "Don't read this sentence %d", armTarget);
-		arm_motor.move_absolute(armTarget, 200);
+		arm_drive(4);
 	} else if (master.get_digital_new_press(DIGITAL_LEFT)) {
-		lever_drive(98);
-		pros::delay(100);
-		lever_drive(0);
-		armIterate = 1;
-		if (armIterate >= ARM_PRESETS_LEN) {
-			armIterate = ARM_PRESETS_LEN;
-		}
-		armTarget = ARM_PRESETS[armIterate];
-		master.print(0, 0, "Don't read this sentence %d", armTarget);
-		arm_motor.move_absolute(armTarget, 200);
+		arm_drive(1);
 	} else if(master.get_digital_new_press(DIGITAL_DOWN)) {
-		lever_drive(98);
-		pros::delay(100);
-		lever_drive(0);
-		armIterate = 2;
-		if (armIterate >= ARM_PRESETS_LEN) {
-			armIterate = ARM_PRESETS_LEN;
-		}
-		armTarget = ARM_PRESETS[armIterate];
-		master.print(0, 0, "Don't read this sentence %d", armTarget);
-		arm_motor.move_absolute(armTarget, 200);
+		arm_drive(2);
 	} else if (master.get_digital_new_press(DIGITAL_Y)) {
 		armIterate = 0;
-		lever_drive(0);
 		arm_motor.move_absolute(20, 200);
 	}
 }
