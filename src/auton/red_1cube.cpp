@@ -8,23 +8,30 @@ void red_1cube() {
     pros::delay(1000);
     arm_drive(0);
 
-    pros::delay(500);
-    intake_drive(200,200);
-    chassis.moveDistance(36_in);
-    chassis.moveDistance(-40_in);
-    pros::delay(500);
-    chassis.moveDistance(10_in);
-    chassis.turnAngle(105);
-    chassis.moveDistance(10_in);
+    chassis.setMaxVelocity(80);
+    intake_drive(100, 100);
 
+    chassis.moveDistance(50.5_in);
+    pros::delay(1000);
+    intake_drive(0,0);
+    chassis.setMaxVelocity(150);
+    chassis.moveDistance(-45_in);
+    pros::delay(500);
+    chassis.setMaxVelocity(100);
+    chassis.turnAngle(115.5_deg);
+    
+    intake_drive(-200,-200);
+    pros::delay(200);
+    intake_drive(0,0);
+    chassis.moveDistance(31.5_in);
     lever_drive(200);
     pros::delay(2500);
     lever_drive(0);
     chassis.setMaxVelocity(200);
     chassis.moveDistance(2_in);
     intake_drive(-200,200);
-    pros::delay(300);
+    pros::delay(400);
     intake_drive(0,0);
     chassis.setMaxVelocity(90);
-    chassis.moveDistance(-5_in);
+    chassis.moveDistance(-8_in);
 }

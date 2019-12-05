@@ -6,8 +6,8 @@ using namespace okapi;
 using namespace pros;
 
 void chassis_tank_drive(float left, float right) {
-	chassis_right_rear.move(-right*200/127);
-	chassis_right_front.move(-right*200/127);
+	chassis_right_rear.move(-right);
+	chassis_right_front.move(-right);
 	
 	chassis_left_front.move(left);
 	chassis_left_rear.move(left);

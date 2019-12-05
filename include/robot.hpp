@@ -12,7 +12,7 @@ const int CHASIIS_RIGHT_FRONT = 12;
 const int CHASSIS_RIGHT_REAR  = 11;
 
 //inkate motor ports
-const int INTAKE_MOTOR_LEFT   = 14;
+const int INTAKE_MOTOR_LEFT   = 13;
 const int INTAKE_MOTOR_RIGHT  = 15;
 
 //lever motor 

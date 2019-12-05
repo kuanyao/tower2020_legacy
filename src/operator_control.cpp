@@ -13,9 +13,12 @@ void chassis_control() {
 
 void intake_control() {
 	if(master.get_digital(E_CONTROLLER_DIGITAL_L1)) {
-		intake_drive(200,200);
+		intake_drive(200, 200);
 	} else if(master.get_digital(E_CONTROLLER_DIGITAL_L2)) {
 		intake_drive(-100,-100);
+	} else if(master.get_digital(E_CONTROLLER_DIGITAL_B)) {
+		intake_drive(master.get_digital(E_CONTROLLER_DIGITAL_B)*90, master.get_digital(E_CONTROLLER_DIGITAL_B)*90);
+		pros::delay(E_CONTROLLER_DIGITAL_B*10);
 	} else {
 		intake_drive(0,0);
 	}
@@ -24,10 +27,10 @@ void intake_control() {
 void lever_control() {
 	if(master.get_digital(E_CONTROLLER_DIGITAL_R2)) {
 		lever_drive(-200);
-		intake_drive(69, 69);
+		intake_drive(75, 75);
 	} else if(master.get_digital(E_CONTROLLER_DIGITAL_R1)) {
 		lever_drive(200);
-		intake_drive(-42, -42);
+		intake_drive(-32, -32);
 	} else {
 		lever_drive(0);
 	}
