@@ -51,6 +51,7 @@ void arm_control() {
 		arm_drive(2);
 	} else if (master.get_digital_new_press(DIGITAL_Y)) {
 		armIterate = 0;
-		arm_motor.move_absolute(20, 200);
+		arm_motor.move_absolute(-200, 200);
+
 	}
 }
