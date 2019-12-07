@@ -13,7 +13,7 @@ void autonomous()
     switch (auton)
     {
     case 5: // test
-        blue_4cube();
+        blue_1cube();
         break;
     case 0: // skills 18
         skill1();
