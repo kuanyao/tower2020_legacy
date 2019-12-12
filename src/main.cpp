@@ -25,6 +25,8 @@ void opcontrol() {
 		// lift from korvex
 		arm_control();
 		
+		arm_control2();
+		
 		pros::delay(20);
 	}
 }

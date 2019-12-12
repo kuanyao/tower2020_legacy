@@ -23,7 +23,7 @@ const int ARM_MOTOR = 18;
 
 
 //arm varibles
-const int ARM_PRESETS[5]  = {0, -768, -840, -905, -1025};
+const int ARM_PRESETS[5]  = {0, -666, -734, -905, -1025};
 const int ARM_PRESETS_LEN = 5;
 
 //chassis
@@ -62,5 +62,6 @@ void intake_control();
 void lever_drive(float lever_speed);
 void lever_control();
 void arm_control();
+void arm_control2();
 
 #endif

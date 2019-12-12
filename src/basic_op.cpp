@@ -40,5 +40,5 @@ void arm_drive(int presetPos) {
 	}
 	armTarget = ARM_PRESETS[armIterate];
 	master.print(0, 0, "Don't read this sentence %d", armTarget);
-	arm_motor.move_absolute(armTarget, 170);
+	arm_motor.move_absolute(armTarget, 200);
 }

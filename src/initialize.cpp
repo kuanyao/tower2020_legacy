@@ -23,7 +23,14 @@ const auto CHASSIS_WIDTH = 9.3_in;
 
 // chassis controller
 okapi::ChassisControllerIntegrated chassis = ChassisControllerFactory::create(
-  {-CHASSIS_LEFT_FRONT, -CHASSIS_LEFT_REAR}, {CHASIIS_RIGHT_FRONT, CHASSIS_RIGHT_REAR},
+  {-CHASSIS_LEFT_FRONT, -CHASSIS_LEFT_REAR}, 
+  {CHASIIS_RIGHT_FRONT, CHASSIS_RIGHT_REAR},
+
+    // IterativePosPIDController::Gains{0.003, 0.0012, 0.000012}, // distance args
+    // IterativePosPIDController::Gains{0.0004, 0.0005, 0.0002},  // angle args (keeps robot straight)
+    // IterativePosPIDController::Gains{0.003, 0.0065, 0.000045},  // turn args
+
+
   AbstractMotor::gearset::green,
   {WHEEL_DIAMETER, CHASSIS_WIDTH}
 );
