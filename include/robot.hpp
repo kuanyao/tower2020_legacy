@@ -23,7 +23,7 @@ const int ARM_MOTOR = 18;
 
 
 //arm varibles
-const int ARM_PRESETS[5]  = {0, -666, -734, -905, -1025};
+const int ARM_PRESETS[5]  = {0, -666, -734, -845, -1025};
 const int ARM_PRESETS_LEN = 5;
 
 //chassis
@@ -41,9 +41,10 @@ extern okapi::AsyncPosIntegratedController arm;
 extern okapi::AsyncPosIntegratedController lever;
 
 
-
+//auto selection
 extern int autonSelection;
 
+//autons 
 void blue_1cube();
 void blue_4cube();
 void red_1cube();
@@ -51,6 +52,7 @@ void red_4cube();
 void skill1();
 void skill2();
 
+//functions 
 void chassis_tank_drive(float left, float right);
 
 void chassis_control();
