@@ -94,10 +94,10 @@ void lever_control() {
 	if(master.get_digital(E_CONTROLLER_DIGITAL_R2)) {
 		lever_drive(-200);
 		//intake pushes out lever slightly
-		intake_drive(75, 75);
+		intake_drive(-15, -15);
 	} else if(master.get_digital(E_CONTROLLER_DIGITAL_R1)) {
 		lever_drive(200);
-		intake_drive(-15, -15);
+		intake_drive(75, 75);
 	} else {
 		lever_drive(0);
 	}
