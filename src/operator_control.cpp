@@ -35,7 +35,7 @@ void arm_control() {
 		armIterate = 0;
 		armPos = 0;
 		arm_motor.move_voltage(12000);
-		pros::delay(500);
+		pros::delay(200);
 		arm_motor.move_voltage(0);
 	} 
 }

@@ -6,20 +6,20 @@
 #include "okapi/api.hpp"
 
 //chassis motor ports
-const int CHASSIS_LEFT_FRONT  = 19;
-const int CHASSIS_LEFT_REAR   = 20;
-const int CHASIIS_RIGHT_FRONT = 12;
-const int CHASSIS_RIGHT_REAR  = 11;
+const int CHASSIS_LEFT_FRONT  = 1;
+const int CHASSIS_LEFT_REAR   = 12;
+const int CHASIIS_RIGHT_FRONT = 14;
+const int CHASSIS_RIGHT_REAR  = 13;
 
 //inkate motor ports
-const int INTAKE_MOTOR_LEFT   = 14;
-const int INTAKE_MOTOR_RIGHT  = 15;
+const int INTAKE_MOTOR_LEFT   = 15;
+const int INTAKE_MOTOR_RIGHT  = 11;
 
 //lever motor 
-const int LEVER_MOTOR = 13;
+const int LEVER_MOTOR = 20;
 
 //arm motor
-const int ARM_MOTOR = 17;
+const int ARM_MOTOR = 10;
 
 
 //arm varibles
