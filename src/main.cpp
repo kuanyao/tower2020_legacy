@@ -1,6 +1,7 @@
 #include "main.h"
 #include "okapi/api.hpp"
 #include "robot.hpp"
+#include "recording.h"
 
 using namespace okapi;
 using namespace pros;
@@ -13,6 +14,8 @@ void competition_initialize() {
 
 void opcontrol() {
 	while (true) {
+		auton_simulator();
+
 		//chassis stuff
 		chassis_control();
 
@@ -27,6 +30,7 @@ void opcontrol() {
 		
 		arm_control2();
 		
-		pros::delay(20);
+		recording::record();
+		pros::delay(ITERATION_INTERVAL);
 	}
 }

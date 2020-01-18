@@ -73,8 +73,18 @@ void arm_control2() {
 void chassis_control() {
 	int left_power = master.get_analog(ANALOG_LEFT_Y);
 	int right_power = master.get_analog(ANALOG_RIGHT_Y);
-	chassis_tank_drive(right_power, -left_power);
+	chassis_tank_drive(-left_power, -right_power);
 }
+
+void auton_simulator() {
+	if (master.get_digital(E_CONTROLLER_DIGITAL_Y)) {	
+		int x_power = master.get_analog(ANALOG_RIGHT_X);
+		if (abs(x_power) > 120) {
+			autonomous();
+		}
+	}
+}
+
 //intake
 void intake_control() {
 	if(master.get_digital(E_CONTROLLER_DIGITAL_L1)) {
@@ -94,10 +104,10 @@ void lever_control() {
 	if(master.get_digital(E_CONTROLLER_DIGITAL_R2)) {
 		lever_drive(-200);
 		//intake pushes out lever slightly
-		intake_drive(75, 75);
+		// intake_drive(75, 75);
 	} else if(master.get_digital(E_CONTROLLER_DIGITAL_R1)) {
 		lever_drive(200);
-		intake_drive(-15, -15);
+		// intake_drive(-15, -15);
 	} else {
 		lever_drive(0);
 	}
