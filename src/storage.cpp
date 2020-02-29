@@ -5,7 +5,6 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <filesystem>
 #include <istream>
 
 namespace storage {
@@ -62,7 +61,7 @@ namespace storage {
         return (mainStr.size() >= toMatch.size() && mainStr.compare(mainStr.size() - toMatch.size(), toMatch.size(), toMatch) == 0);
     }
 
-    void load_program(const filesystem::path& path) {
+    void load_program(const string path) {
         string line;
         std::ifstream infile(path);
         vector<RecordUnit> rus;
@@ -83,8 +82,9 @@ namespace storage {
         }
         cout << "done." << endl;
         if (rus.size() > 1) {
-            string filename = path.filename();
-            all_programs.insert_or_assign(filename.substr(0, filename.size() - 5), rus);
+            string slot_name = path.substr(5, path.size() - 10);
+            cout << "putting file " << slot_name << endl;
+            all_programs.insert_or_assign(slot_name, rus);
         }
         infile.close();
     }
@@ -102,8 +102,8 @@ namespace storage {
 
         cout << "try to load all programs on disk" << endl;
         for (int i=0; i<slot_names.size(); ++i) {
-            filesystem::path p("/usd/" + slot_names[i] + ".data");
-            load_program(p);
+            string path = "/usd/" + slot_names[i] + ".data";
+            load_program(path);
         }
         cout << "finished loading." << endl;
     }
